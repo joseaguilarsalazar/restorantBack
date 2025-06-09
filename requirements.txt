@@ -4,6 +4,4 @@ psycopg2-binary
 djangorestframework
 drf-yasg
 djangorestframework-simplejwt
-
-
-
+django-cors-headers
