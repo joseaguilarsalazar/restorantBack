@@ -16,4 +16,4 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY . /app/
 
 # Run app
-CMD ["gunicorn", "your_project_name.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "ProyectoBack.wsgi:application", "--bind", "0.0.0.0:8000"]
