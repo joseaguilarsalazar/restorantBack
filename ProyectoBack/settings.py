@@ -27,7 +27,9 @@ SECRET_KEY = 'django-insecure-@_4naywvp2h&0*dm&^pkkfz%0aq@6kifxe#e!k#)+ge&_4fdc2
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://lp5-backend.jmtqu4.easypanel.host',
+]
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
