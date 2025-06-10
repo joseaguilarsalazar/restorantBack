@@ -21,8 +21,22 @@ class MesaViewSet(ModelViewSet):
     queryset = Mesa.objects.all()
 
 class PlatoViewSet(ModelViewSet):
-    serializer_class = PlatoSerializer
     queryset = Plato.objects.all()
+    serializer_class = PlatoSerializer
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['name', 'precio'],
+            properties={
+                'name': openapi.Schema(type=openapi.TYPE_STRING),
+                'precio': openapi.Schema(type=openapi.TYPE_INTEGER),
+                'imagen': openapi.Schema(type=openapi.TYPE_FILE),
+            },
+        )
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
 class PedidoViewSet(ModelViewSet):
     serializer_class = PedidoSerializer
