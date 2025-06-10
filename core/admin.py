@@ -11,7 +11,9 @@ from . models import (
 )
 
 admin.site.register(Empleado)
-admin.site.register(Plato)
+@admin.register(Plato)
+class PlatoAdmin(admin.ModelAdmin):
+    list_display = ('name', 'precio')
 admin.site.register(Insumo)
 admin.site.register(Mesa)
 admin.site.register(Rol)

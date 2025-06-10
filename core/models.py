@@ -25,6 +25,7 @@ class Mesa(models.Model):
 class Plato(models.Model):
     name = models.CharField(max_length=100)
     precio = models.IntegerField()
+    imagen = models.ImageField(upload_to='platos/', blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
