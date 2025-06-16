@@ -11,6 +11,12 @@ from .models import (
     PlatoInsumo,
     CompraInsumo,
 )
+from django.contrib.auth.models import User
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
 
 class EmpleadoSerializer(serializers.ModelSerializer):
     class Meta:
