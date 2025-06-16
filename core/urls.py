@@ -11,6 +11,7 @@ from .views import (
     CompraInsumoViewSet,
     RegisterView,  # ✅ Add this
     CustomTokenObtainPairView,  # ✅ Optional: only if using custom login response
+    UserViewSet,
 )
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -26,6 +27,7 @@ router.register(r'plato-insumos', PlatoInsumoViewSet)
 router.register(r'pedidos', PedidoViewSet)
 router.register(r'insumos', InsumoViewSet)
 router.register(r'compras-insumo', CompraInsumoViewSet)
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
