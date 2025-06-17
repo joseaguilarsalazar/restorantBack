@@ -8,6 +8,7 @@ from drf_yasg import openapi
 from .models import *
 from .serializers import *
 from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
 
 class RolViewSet(ModelViewSet):
     serializer_class = RolSerializer
@@ -114,3 +115,44 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+    
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    @swagger_auto_schema(
+        operation_summary="Change password (JWT required)",
+        operation_description=(
+            "Change password for the currently authenticated user. "
+            "You must send the access token in the `Authorization` header like this:\n\n"
+            "`Authorization: Bearer <access_token>`"
+        ),
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=["current_password", "new_password"],
+            properties={
+                "current_password": openapi.Schema(type=openapi.TYPE_STRING, example="old_password"),
+                "new_password": openapi.Schema(type=openapi.TYPE_STRING, example="new_password123"),
+            },
+        ),
+        responses={
+            200: openapi.Response(description="Password changed successfully."),
+            400: openapi.Response(description="Invalid input or incorrect current password."),
+            401: openapi.Response(description="Authentication credentials were not provided or invalid."),
+        },
+    )
+    def post(self, request):
+        user = request.user
+        current_password = request.data.get("current_password")
+        new_password = request.data.get("new_password")
+
+        if not current_password or not new_password:
+            return Response({"error": "Both current and new passwords are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not user.check_password(current_password):
+            return Response({"error": "Current password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response({"success": "Password changed successfully."}, status=status.HTTP_200_OK)
