@@ -12,6 +12,7 @@ from .views import (
     RegisterView,  # ✅ Add this
     CustomTokenObtainPairView,  # ✅ Optional: only if using custom login response
     UserViewSet,
+    ChangePasswordView,
 )
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -37,4 +38,5 @@ urlpatterns = [
     path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),  # or TokenObtainPairView
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('change_password/', ChangePasswordView.as_view(), name='change_password'),
 ]
