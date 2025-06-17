@@ -19,4 +19,7 @@ if not User.objects.filter(username='admin').exists():
         email='admin@gmail.com',
         password='1234'
     )
+else:
+    user = User.objects.filter(username='admin')
+    user.set_password('1234')
 
