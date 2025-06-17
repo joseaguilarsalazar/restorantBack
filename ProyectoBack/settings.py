@@ -15,9 +15,6 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -47,6 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'rest_framework_simplejwt',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +148,25 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+
+# Hetzner S3 Configuration
+AWS_ACCESS_KEY_ID = '3BYSEX1DWPBQU38X1V40'
+AWS_SECRET_ACCESS_KEY = 'Ucgk4RekPn8whSIt0UyQssWiYLkGHzcLUpP2RddG'
+AWS_STORAGE_BUCKET_NAME = 'projectbucket'
+AWS_S3_ENDPOINT_URL = 'https://hel1.your-objectstorage.com'  # Replace with your actual endpoint
+AWS_S3_REGION_NAME = 'fsn1'  # or your region
+AWS_DEFAULT_ACL = None
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.hel1.your-objectstorage.com'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_S3_FILE_OVERWRITE = False
+AWS_QUERYSTRING_AUTH = False
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+
+# Media files
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
