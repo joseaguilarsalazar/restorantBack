@@ -15,7 +15,7 @@ class RolViewSet(ModelViewSet):
 
 class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.all().filter(is_superuser=False)
 
 class EmpleadoViewSet(ModelViewSet):
     serializer_class = EmpleadoSerializer
