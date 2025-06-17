@@ -20,7 +20,7 @@ if not User.objects.filter(username='admin').exists():
         password='1234'
     )
 else:
-    user = User.objects.get(username='admin')  # CORREGIDO: usar get() en lugar de filter()
+    user = User.objects.get(username='admin')
     user.set_password('1234')
     user.save()
 
