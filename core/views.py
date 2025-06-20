@@ -160,18 +160,46 @@ class ChangePasswordView(APIView):
 
 class WebSocketDocView(APIView):
     """
-    This is a fake endpoint to document WebSocket usage.
-    WebSocket URL: `ws://lp5-backend.jmtqu4.easypanel.host/ws/pedidos/`
-    On connect: joins `realtime_updates` group.
-    Receives JSON: {"type": "pedido_update", "payload": [...]}
+    Documentación del WebSocket.
+
+    URL del WebSocket: `ws://lp5-backend.jmtqu4.easypanel.host/ws/pedidos/`
+
+    ▶️ Al conectarse:
+    - El cliente se une al grupo `realtime_updates`.
+
+    📤 Datos que recibirá el cliente:
+    ```json
+    {
+        "type": "send_data",
+        "data": [
+            {
+                "id": 1,
+                "mesa": 3,
+                "plato": "Arroz con pollo",
+                "cantidad": 2,
+                "datetime": "2025-06-17T19:38:51.123Z",
+                "estado": "ordenado"
+            },
+            ...
+        ]
+    }
+    ```
     """
 
     @swagger_auto_schema(
-        operation_description="WebSocket Documentation: Connect to ws://lp5-backend.jmtqu4.easypanel.host/ws/pedidos/",
+        operation_summary="Documentación del WebSocket de pedidos",
+        operation_description="""
+Este endpoint solo sirve para documentación de Swagger.
+
+- URL del WebSocket: `ws://lp5-backend.jmtqu4.easypanel.host/ws/pedidos/`
+- Se une al grupo `realtime_updates` al conectarse.
+- Recibe actualizaciones de pedidos en tiempo real.
+        """,
         responses={200: "OK"}
     )
     def get(self, request):
-        return Response({"detail": "This is just documentation"}, status=status.HTTP_200_OK)
+        return Response({"detail": "Esta vista es solo para documentación"}, status=status.HTTP_200_OK)
+
     
 class PedidoToNextStateAPIView(APIView):
 
