@@ -189,11 +189,30 @@ class WebSocketDocView(APIView):
     @swagger_auto_schema(
         operation_summary="Documentación del WebSocket de pedidos",
         operation_description="""
-Este endpoint solo sirve para documentación de Swagger.
+Documentación del WebSocket.
 
-- URL del WebSocket: `wss://lp5-backend.jmtqu4.easypanel.host/ws/pedidos/`
-- Se une al grupo `realtime_updates` al conectarse.
-- Recibe actualizaciones de pedidos en tiempo real.
+    URL del WebSocket: `wss://lp5-backend.jmtqu4.easypanel.host/ws/pedidos/`
+
+    ▶️ Al conectarse:
+    - El cliente se une al grupo `realtime_updates`.
+
+    📤 Datos que recibirá el cliente:
+    ```json
+    {
+        "type": "send_data",
+        "data": [
+            {
+                "id": 1,
+                "mesa": 3,
+                "plato": "Arroz con pollo",
+                "cantidad": 2,
+                "datetime": "2025-06-17T19:38:51.123Z",
+                "estado": "ordenado"
+            },
+            ...
+        ]
+    }
+    ```
         """,
         responses={200: "OK"}
     )
