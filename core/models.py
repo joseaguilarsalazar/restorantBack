@@ -36,7 +36,18 @@ class Pedido(models.Model):
     mesa = models.ForeignKey(Mesa, on_delete=models.SET_NULL, null=True)
     cantidad = models.IntegerField()
     fecha = models.DateTimeField(default=timezone.now)
-    estado = models.CharField(max_length=100)
+    ESTADO_CHOICES = [
+        ('ordenado', 'Ordenado'),
+        ('preparacion', 'En Preparación'),
+        ('servido', 'Servido'),
+        ('pagado', 'Pagado'),
+    ]
+
+    estado = models.CharField(
+        max_length=100,
+        choices=ESTADO_CHOICES,
+        default='ordenado',  # optional default
+    )
 
     def __str__(self):
         return str('Pedido' + str(self.id))

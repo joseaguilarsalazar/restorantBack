@@ -13,6 +13,7 @@ from .views import (
     CustomTokenObtainPairView,  # ✅ Optional: only if using custom login response
     UserViewSet,
     ChangePasswordView,
+    PedidoToNextStateAPIView,
 )
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -39,4 +40,5 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('change_password/', ChangePasswordView.as_view(), name='change_password'),
+    path('pedido_next_state/', PedidoToNextStateAPIView.as_view(), name='pedido_next_state'),
 ]

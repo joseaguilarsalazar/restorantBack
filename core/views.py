@@ -156,3 +156,90 @@ class ChangePasswordView(APIView):
         user.save()
 
         return Response({"success": "Password changed successfully."}, status=status.HTTP_200_OK)
+    
+
+class WebSocketDocView(APIView):
+    """
+    This is a fake endpoint to document WebSocket usage.
+    WebSocket URL: `ws://lp5-backend.jmtqu4.easypanel.host/ws/pedidos/`
+    On connect: joins `realtime_updates` group.
+    Receives JSON: {"type": "pedido_update", "payload": [...]}
+    """
+
+    @swagger_auto_schema(
+        operation_description="WebSocket Documentation: Connect to ws://lp5-backend.jmtqu4.easypanel.host/ws/pedidos/",
+        responses={200: "OK"}
+    )
+    def get(self, request):
+        return Response({"detail": "This is just documentation"}, status=status.HTTP_200_OK)
+    
+class PedidoToNextStateAPIView(APIView):
+
+    @swagger_auto_schema(
+        operation_summary="Cambiar estado del pedido al siguiente",
+        operation_description="""
+Avanza el estado de un pedido en la secuencia:
+
+`ordenado → preparacion → servido → pagado`
+
+Requiere el ID del pedido en el cuerpo de la solicitud.
+        """,
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=["pedido_id"],
+            properties={
+                "pedido_id": openapi.Schema(type=openapi.TYPE_INTEGER, description="ID del pedido"),
+            },
+        ),
+        responses={
+            200: openapi.Response(
+                description="Estado cambiado con éxito",
+                examples={
+                    "application/json": {
+                        "success": "Estado actualizado correctamente",
+                        "nuevo_estado": "preparacion"
+                    }
+                },
+            ),
+            404: openapi.Response(
+                description="Pedido no encontrado",
+                examples={
+                    "application/json": {
+                        "error": "Pedido no encontrado"
+                    }
+                },
+            ),
+            400: openapi.Response(
+                description="No se puede avanzar el estado",
+                examples={
+                    "application/json": {
+                        "error": "El pedido ya está en su estado final o el estado actual es inválido"
+                    }
+                },
+            ),
+        }
+    )
+    def post(self, request):
+        pedido_id = request.data.get('pedido_id')
+
+        pedido = Pedido.objects.filter(id=pedido_id).first()
+        if not pedido:
+            return Response({'error': 'Pedido no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+        TRANSICIONES = {
+            'ordenado': 'preparacion',
+            'preparacion': 'servido',
+            'servido': 'pagado',
+        }
+
+        nuevo_estado = TRANSICIONES.get(pedido.estado)
+        if not nuevo_estado:
+            return Response({'error': 'El pedido ya está en su estado final o el estado actual es inválido'}, status=status.HTTP_400_BAD_REQUEST)
+
+        pedido.estado = nuevo_estado
+        pedido.save()
+
+        return Response({
+            'success': 'Estado actualizado correctamente',
+            'nuevo_estado': nuevo_estado
+        }, status=status.HTTP_200_OK)

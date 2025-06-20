@@ -8,3 +8,5 @@ django-cors-headers
 Pillow
 boto3
 django-storages
+channels
+daphne
