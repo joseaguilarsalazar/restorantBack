@@ -1,7 +1,7 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 from asgiref.sync import sync_to_async
-from .models import Pedido
+
 
 class PedidoConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -26,6 +26,7 @@ class PedidoConsumer(AsyncWebsocketConsumer):
         }))
 
     async def send_initial_data(self):
+        from .models import Pedido
         pedidos = await sync_to_async(list)(Pedido.objects.exclude(estado="pagado"))
         data = [{
             'id': p.id,
