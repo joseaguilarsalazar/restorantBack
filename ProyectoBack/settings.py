@@ -160,16 +160,20 @@ AWS_STORAGE_BUCKET_NAME = 'projectbucket'
 AWS_S3_ENDPOINT_URL = 'https://hel1.your-objectstorage.com'  # Replace with your actual endpoint
 AWS_S3_REGION_NAME = 'fsn1'  # or your region
 AWS_DEFAULT_ACL = None
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.hel1.your-objectstorage.com'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 AWS_S3_FILE_OVERWRITE = False
-AWS_QUERYSTRING_AUTH = False
+AWS_QUERYSTRING_AUTH = True
+AWS_S3_FILE_OVERWRITE = False  # recommended if users upload files with same name
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_QUERYSTRING_EXPIRE = 36000  # 1 hour
+AWS_S3_CUSTOM_DOMAIN = None
+
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
 # Media files
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+MEDIA_URL = '/media/'
