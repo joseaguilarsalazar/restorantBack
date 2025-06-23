@@ -156,6 +156,19 @@ LOCATION_PREFIX = ""
 PUBLIC_MEDIA_LOCATION = f"{LOCATION_PREFIX}media"
 PRIVATE_MEDIA_LOCATION = f"{LOCATION_PREFIX}private"
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+
+STORAGES["default"] = {
+        "BACKEND": "media_app.storage_backends.PublicMediaStorage"
+    }
+
 # Hetzner S3 Configuration
 AWS_ACCESS_KEY_ID = '3BYSEX1DWPBQU38X1V40'
 AWS_SECRET_ACCESS_KEY = 'Ucgk4RekPn8whSIt0UyQssWiYLkGHzcLUpP2RddG'
