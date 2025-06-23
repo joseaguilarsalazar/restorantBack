@@ -157,8 +157,8 @@ REST_FRAMEWORK = {
 AWS_ACCESS_KEY_ID = '3BYSEX1DWPBQU38X1V40'
 AWS_SECRET_ACCESS_KEY = 'Ucgk4RekPn8whSIt0UyQssWiYLkGHzcLUpP2RddG'
 AWS_STORAGE_BUCKET_NAME = 'projectbucket'
-AWS_S3_ENDPOINT_URL = 'https://hel1.your-objectstorage.com'  # Replace with your actual endpoint
-AWS_S3_REGION_NAME = 'fsn1'  # or your region
+AWS_S3_ENDPOINT_URL = 'hel1.your-objectstorage.com'  # Replace with your actual endpoint
+AWS_S3_REGION_NAME = 'eu-central'  # or your region
 AWS_DEFAULT_ACL = None
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
@@ -173,6 +173,3 @@ AWS_S3_CUSTOM_DOMAIN = None
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-# Media files
-MEDIA_URL = '/media/'
