@@ -152,14 +152,22 @@ REST_FRAMEWORK = {
     )
 }
 
+LOCATION_PREFIX = ""
+PUBLIC_MEDIA_LOCATION = f"{LOCATION_PREFIX}media"
+PRIVATE_MEDIA_LOCATION = f"{LOCATION_PREFIX}private"
 
 # Hetzner S3 Configuration
 AWS_ACCESS_KEY_ID = '3BYSEX1DWPBQU38X1V40'
 AWS_SECRET_ACCESS_KEY = 'Ucgk4RekPn8whSIt0UyQssWiYLkGHzcLUpP2RddG'
 AWS_STORAGE_BUCKET_NAME = 'projectbucket'
+AWS_S3_ADDRESSING_STYLE = "virtual"
 AWS_S3_ENDPOINT_URL = 'hel1.your-objectstorage.com'  # Replace with your actual endpoint
 AWS_S3_REGION_NAME = 'eu-central'  # or your region
 AWS_DEFAULT_ACL = None
+AWS_DEFAULT_ACL = None # private by default
+PUBLIC_MEDIA_LOCATION = f"{LOCATION_PREFIX}media"
+PRIVATE_MEDIA_LOCATION = f"{LOCATION_PREFIX}private"
+MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/{LOCATION_PREFIX}media/"
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
@@ -168,6 +176,7 @@ AWS_QUERYSTRING_AUTH = True
 AWS_S3_FILE_OVERWRITE = False  # recommended if users upload files with same name
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_QUERYSTRING_EXPIRE = 36000  # 1 hour
+PRESIGNED_URL_EXPIRATION = 36000
 AWS_S3_CUSTOM_DOMAIN = None
 
 
