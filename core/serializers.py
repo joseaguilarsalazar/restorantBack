@@ -26,7 +26,7 @@ class EmpleadoSerializer(serializers.ModelSerializer):
 class PlatoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plato
-        fields = "__all__"
+        fields = ['id', 'name', 'precio', 'imagen']
 
 class InsumoSerializer(serializers.ModelSerializer):
     class Meta:
