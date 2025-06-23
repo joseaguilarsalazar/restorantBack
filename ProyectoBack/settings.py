@@ -166,7 +166,7 @@ STORAGES = {
 }
 
 STORAGES["default"] = {
-    "BACKEND": "core.storage_backends.PublicMediaStorage"
+    "BACKEND": "ProyectoBack.storage_backends.PublicMediaStorage"
 }
 
 # Hetzner S3 Configuration
