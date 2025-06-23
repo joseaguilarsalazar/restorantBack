@@ -165,10 +165,6 @@ STORAGES = {
     },
 }
 
-STORAGES["default"] = {
-        "BACKEND": "core.storage_backends.PublicMediaStorage"
-    }
-
 # Hetzner S3 Configuration
 AWS_ACCESS_KEY_ID = '3BYSEX1DWPBQU38X1V40'
 AWS_SECRET_ACCESS_KEY = 'Ucgk4RekPn8whSIt0UyQssWiYLkGHzcLUpP2RddG'
