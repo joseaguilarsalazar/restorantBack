@@ -195,3 +195,13 @@ AWS_S3_CUSTOM_DOMAIN = None
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["redis://default:1234@lp5_redis:6379/0"],
+        },
+    },
+}
