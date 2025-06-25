@@ -2,7 +2,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 from asgiref.sync import sync_to_async
 
-from .models import Pedido
+
 
 
 class PedidoConsumer(AsyncWebsocketConsumer):
@@ -32,6 +32,7 @@ class PedidoConsumer(AsyncWebsocketConsumer):
 
 @sync_to_async
 def get_pedidos_data():
+    from .models import Pedido
     pedidos = Pedido.objects.select_related('mesa', 'plato').exclude(estado="pagado")
     return [{
         'id': p.id,
