@@ -9,6 +9,7 @@ from .models import *
 from .serializers import *
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 class RolViewSet(ModelViewSet):
     serializer_class = RolSerializer
@@ -221,7 +222,7 @@ Documentación del WebSocket.
 
     
 class PedidoToNextStateAPIView(APIView):
-
+    permission_classes = [AllowAny]
     @swagger_auto_schema(
         operation_summary="Cambiar estado del pedido al siguiente",
         operation_description="""
