@@ -29,6 +29,19 @@ CSRF_TRUSTED_ORIGINS = [
     'https://lp5-backend.jmtqu4.easypanel.host',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = [
+    "authorization",
+    "content-type",
+]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
 
 # Application definition
 
