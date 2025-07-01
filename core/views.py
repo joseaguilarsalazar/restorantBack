@@ -10,6 +10,7 @@ from .serializers import *
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
+from django.db import transaction
 
 class RolViewSet(ModelViewSet):
     serializer_class = RolSerializer
@@ -50,6 +51,30 @@ class PlatoViewSet(ModelViewSet):
 class PedidoViewSet(ModelViewSet):
     serializer_class = PedidoSerializer
     queryset = Pedido.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        plato_id = request.data.get('plato')
+        plato = Plato.objects.filter(id=plato_id).first()
+
+        if not plato:
+            return Response({"error": "Plato no encontrado"}, status=status.HTTP_400_BAD_REQUEST)
+
+        insumos = PlatoInsumo.objects.filter(plato=plato)
+
+        try:
+            with transaction.atomic():
+                for pi in insumos:
+                    insumo = pi.insumo
+                    if insumo.stock < pi.cantidad:
+                        raise ValueError(f"Insumo {insumo.nombre} sin stock suficiente.")
+                    insumo.stock -= pi.cantidad
+                    insumo.save()
+
+                # Guardar el pedido solo si los insumos fueron descontados correctamente
+                return super().create(request, *args, **kwargs)
+
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class PlatoInsumoViewSet(ModelViewSet):
     serializer_class = PlatoInsumoSerializer
