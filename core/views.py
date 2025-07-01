@@ -62,6 +62,9 @@ class PedidoViewSet(ModelViewSet):
 
         insumos = PlatoInsumo.objects.filter(plato=plato)
 
+        if not insumos:
+            return super().create(request, *args, **kwargs)
+
         try:
             with transaction.atomic():
                 for pi in insumos:
