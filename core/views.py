@@ -54,6 +54,7 @@ class PedidoViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         plato_id = request.data.get('plato')
+        cantidad = int(request.data.get('cantidad'))
         plato = Plato.objects.filter(id=plato_id).first()
 
         if not plato:
@@ -65,9 +66,9 @@ class PedidoViewSet(ModelViewSet):
             with transaction.atomic():
                 for pi in insumos:
                     insumo = pi.insumo
-                    if insumo.stock < pi.cantidad:
+                    if insumo.stock < pi.cantidad * cantidad:
                         raise ValueError(f"Insumo {insumo.nombre} sin stock suficiente.")
-                    insumo.stock -= pi.cantidad
+                    insumo.stock -= pi.cantidad * cantidad
                     insumo.save()
 
                 # Guardar el pedido solo si los insumos fueron descontados correctamente
