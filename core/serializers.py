@@ -29,7 +29,7 @@ class PlatoSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'precio', 'imagen']
 
 class PlatoGetSerializer(serializers.ModelSerializer):
-    disponibles = serializers.IntegerField()
+    disponibles = serializers.SerializerMethodField()
     class Meta:
         model = Plato
         fields = ['id', 'name', 'precio', 'imagen', 'disponibles']
