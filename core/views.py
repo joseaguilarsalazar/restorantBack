@@ -30,6 +30,7 @@ class MesaViewSet(ModelViewSet):
     queryset = Mesa.objects.all()
 
 class PlatoViewSet(ModelViewSet):
+    queryset = Plato.objects.all() 
     def get_queryset(self):
         if self.action == 'list':
             spanish_weekdays = {
