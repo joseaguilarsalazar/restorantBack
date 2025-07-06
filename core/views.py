@@ -30,7 +30,11 @@ class MesaViewSet(ModelViewSet):
 
 class PlatoViewSet(ModelViewSet):
     queryset = Plato.objects.all()
-    serializer_class = PlatoSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PlatoGetSerializer
+        return PlatoSerializer
 
     @swagger_auto_schema(
         operation_description="Create a new Plato. Must use multipart/form-data for image upload.",

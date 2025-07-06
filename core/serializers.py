@@ -28,6 +28,25 @@ class PlatoSerializer(serializers.ModelSerializer):
         model = Plato
         fields = ['id', 'name', 'precio', 'imagen']
 
+class PlatoGetSerializer(serializers.ModelSerializer):
+    disponibles = serializers.IntegerField()
+    class Meta:
+        model = Plato
+        fields = ['id', 'name', 'precio', 'imagen', 'disponibles']
+
+    def get_disponibles(self, obj):
+        # 🔧 Replace this with your actual logic
+        # For example, summing available stock from related items
+        platosinsumo = PlatoInsumo.objects.filter(plato__id = self.id)
+        disponible = 1000
+        for platoinsumo in platosinsumo:
+            cantidad = platoinsumo.cantidad / platoinsumo.insumo.stock
+            cantidad = int(cantidad)
+            if cantidad < disponible:
+                disponible = cantidad
+
+        return disponible
+
 class InsumoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Insumo
