@@ -35,12 +35,13 @@ class PlatoGetSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'precio', 'imagen', 'disponibles']
 
     def get_disponibles(self, obj):
-        # 🔧 Replace this with your actual logic
-        # For example, summing available stock from related items
-        platosinsumo = PlatoInsumo.objects.filter(plato__id = self.id)
+        platosinsumo = PlatoInsumo.objects.filter(plato=obj)
         disponible = 1000
+
         for platoinsumo in platosinsumo:
-            cantidad = platoinsumo.cantidad / platoinsumo.insumo.stock
+            if platoinsumo.insumo.stock == 0:
+                return 0  # si un insumo no tiene stock, no se puede hacer el plato
+            cantidad = platoinsumo.insumo.stock / platoinsumo.cantidad
             cantidad = int(cantidad)
             if cantidad < disponible:
                 disponible = cantidad
