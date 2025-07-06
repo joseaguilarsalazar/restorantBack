@@ -15,6 +15,7 @@ from .views import (
     ChangePasswordView,
     PedidoToNextStateAPIView,
     WebSocketDocView,
+    PlatosDelDia,
 )
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -43,4 +44,5 @@ urlpatterns = [
     path('change_password/', ChangePasswordView.as_view(), name='change_password'),
     path('pedido_next_state/', PedidoToNextStateAPIView.as_view(), name='pedido_next_state'),
     path('websocket/', WebSocketDocView.as_view(), name='websocket'),
+    path('platos_del_dia/', PlatosDelDia.as_view(), name='platos_del_dia')
 ]
