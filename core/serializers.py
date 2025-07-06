@@ -38,6 +38,9 @@ class PlatoGetSerializer(serializers.ModelSerializer):
         platosinsumo = PlatoInsumo.objects.filter(plato=obj)
         disponible = 1000
 
+        if not platosinsumo.exists():
+            return None
+
         for platoinsumo in platosinsumo:
             if platoinsumo.insumo.stock == 0:
                 return 0  # si un insumo no tiene stock, no se puede hacer el plato
