@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
 from django.db import transaction
+import datetime
 
 class RolViewSet(ModelViewSet):
     serializer_class = RolSerializer
@@ -29,7 +30,30 @@ class MesaViewSet(ModelViewSet):
     queryset = Mesa.objects.all()
 
 class PlatoViewSet(ModelViewSet):
-    queryset = Plato.objects.all()
+    def get_queryset(self):
+        if self.action == 'list':
+            spanish_weekdays = {
+                'Monday': 'lunes',
+                'Tuesday': 'martes',
+                'Wednesday': 'miércoles',
+                'Thursday': 'jueves',
+                'Friday': 'viernes',
+                'Saturday': 'sábado',
+                'Sunday': 'domingo',
+            }
+
+            today_english = datetime.date.today().strftime('%A')
+            today_spanish = spanish_weekdays.get(today_english)
+
+            values = Plato.objects.all()
+            data = []
+            for plato in values:
+                plato_dia = PlatoDia.objects.filter(plato_id=plato.id).first()
+                if plato_dia and plato_dia.dia.name.lower() == today_spanish:
+                    data.append(plato)
+            return data
+
+        return Plato.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

@@ -8,6 +8,8 @@ from . models import (
     Pedido,
     PlatoInsumo,
     CompraInsumo,
+    Dia,
+    PlatoDia,
 )
 
 admin.site.register(Empleado)
@@ -20,3 +22,5 @@ admin.site.register(Rol)
 admin.site.register(Pedido)
 admin.site.register(PlatoInsumo)
 admin.site.register(CompraInsumo)
+admin.site.register(Dia)
+admin.site.register(PlatoDia)

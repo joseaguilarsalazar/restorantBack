@@ -22,6 +22,12 @@ class Mesa(models.Model):
     def __str__(self):
         return str(self.id)
     
+class Dia(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
 class Plato(models.Model):
     name = models.CharField(max_length=100)
     precio = models.IntegerField()
@@ -29,6 +35,14 @@ class Plato(models.Model):
 
     def __str__(self):
         return str(self.name)
+    
+class PlatoDia(models.Model):
+    dia = models.ForeignKey(Dia,on_delete=models.CASCADE)
+    plato = models.ForeignKey(Plato, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.plato.name} {self.dia.name}'
+    
 
 class Pedido(models.Model):
     plato = models.ForeignKey(Plato, on_delete=models.SET_NULL, null=True)
