@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -31,30 +32,6 @@ class MesaViewSet(ModelViewSet):
 
 class PlatoViewSet(ModelViewSet):
     queryset = Plato.objects.all() 
-    def get_queryset(self):
-        if self.action == 'list':
-            spanish_weekdays = {
-                'Monday': 'lunes',
-                'Tuesday': 'martes',
-                'Wednesday': 'miércoles',
-                'Thursday': 'jueves',
-                'Friday': 'viernes',
-                'Saturday': 'sábado',
-                'Sunday': 'domingo',
-            }
-
-            today_english = datetime.date.today().strftime('%A')
-            today_spanish = spanish_weekdays.get(today_english)
-
-            values = Plato.objects.all()
-            data = []
-            for plato in values:
-                plato_dia = PlatoDia.objects.filter(plato_id=plato.id).first()
-                if plato_dia and plato_dia.dia.name.lower() == today_spanish:
-                    data.append(plato)
-            return data
-
-        return Plato.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -62,20 +39,55 @@ class PlatoViewSet(ModelViewSet):
         return PlatoSerializer
 
     @swagger_auto_schema(
-        operation_description="Create a new Plato. Must use multipart/form-data for image upload.",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=['name', 'precio'],
-            properties={
-                'name': openapi.Schema(type=openapi.TYPE_STRING),
-                'precio': openapi.Schema(type=openapi.TYPE_INTEGER),
-                'imagen': openapi.Schema(type=openapi.TYPE_FILE, description="Image file (optional)"),
-            },
-        ),
-        consumes=['multipart/form-data'],
+    operation_description="Create a new Plato. Must use multipart/form-data for image upload.",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['name', 'precio'],
+        properties={
+            'name': openapi.Schema(type=openapi.TYPE_STRING),
+            'precio': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'imagen': openapi.Schema(type=openapi.TYPE_FILE, description="Image file (optional)"),
+        },
+    ),
+    consumes=['multipart/form-data'],
+    responses={201: 'Plato creado exitosamente'}
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
+    
+class PlatosDelDia(ListAPIView):
+    queryset = Plato.objects.all() 
+    serializer_class = PlatoGetSerializer
+
+    @swagger_auto_schema(
+        operation_description="Lista los platos disponibles solo para el día actual según su asociación con días de la semana.",
+        responses={200: PlatoGetSerializer(many=True)},
+        tags=["Platos"]
+    )
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def get_queryset(self):
+        spanish_weekdays = {
+            'Monday': 'lunes',
+            'Tuesday': 'martes',
+            'Wednesday': 'miércoles',
+            'Thursday': 'jueves',
+            'Friday': 'viernes',
+            'Saturday': 'sábado',
+            'Sunday': 'domingo',
+        }
+
+        today_english = datetime.date.today().strftime('%A')
+        today_spanish = spanish_weekdays.get(today_english)
+
+        values = Plato.objects.all()
+        data = []
+        for plato in values:
+            plato_dia = PlatoDia.objects.filter(plato_id=plato.id).first()
+            if plato_dia and plato_dia.dia.name.lower() == today_spanish:
+                data.append(plato)
+        return data
 
 class PedidoViewSet(ModelViewSet):
     serializer_class = PedidoSerializer
